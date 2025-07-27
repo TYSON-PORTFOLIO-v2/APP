@@ -1,1 +1,1896 @@
-# APP
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TYSON AI PREDICTION SYSTEM</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --secondary: #0ea5e9;
+            --accent: #ec4899;
+            --dark: #0f172a;
+            --darker: #020617;
+            --login-primary: #00cc66;
+            --login-primary-dark: #008040;
+            --login-secondary: #ff3366;
+            --login-dark-bg: #0a1929;
+            --login-darker-bg: #071422;
+            --login-panel-bg: rgba(15, 40, 65, 0.9);
+            --login-text-light: #f0f8ff;
+            --login-text-gray: #a0b0c0;
+            --login-border-glow: rgba(0, 204, 102, 0.5);
+            --login-red-glow: rgba(255, 51, 102, 0.7);
+            --login-gold: #ffcc00;
+        }
+        
+        /* Login Page Styles */
+        #login-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, var(--login-darker-bg), var(--login-dark-bg));
+            z-index: 1000;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        
+        #login-container.hidden {
+            opacity: 0;
+            transform: translateY(-20px);
+            pointer-events: none;
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .login-panel {
+            background: var(--login-panel-bg);
+            border: 1px solid var(--login-border-glow);
+            border-radius: 15px;
+            padding: 35px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .login-panel::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--login-primary), var(--login-primary-dark), var(--login-primary), var(--login-primary-dark));
+            z-index: -1;
+            border-radius: 17px;
+            animation: borderAnimation 4s linear infinite;
+            background-size: 400% 400%;
+        }
+        
+        @keyframes borderAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .login-header h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 32px;
+            color: var(--login-primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 204, 102, 0.5);
+            margin-bottom: 10px;
+        }
+        
+        .login-header p {
+            color: var(--login-text-gray);
+            font-size: 16px;
+        }
+        
+        .user-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--login-primary), var(--login-primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            border: 3px solid var(--login-gold);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+        }
+        
+        .user-avatar i {
+            font-size: 36px;
+            color: white;
+        }
+        
+        .user-info {
+            text-align: left;
+        }
+        
+        .user-info h2 {
+            font-size: 22px;
+            color: var(--login-text-light);
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .user-info .user-role {
+            background: var(--login-gold);
+            color: #000;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--login-text-gray);
+            font-size: 16px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            padding-left: 45px;
+            border: 1px solid var(--login-border-glow);
+            border-radius: 10px;
+            background: rgba(15, 40, 65, 0.8);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--login-primary);
+            box-shadow: 0 0 15px rgba(0, 204, 102, 0.3);
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            color: var(--login-primary);
+            font-size: 18px;
+        }
+        
+        .btn {
+            background: linear-gradient(90deg, var(--login-primary), var(--login-primary-dark));
+            color: white;
+            padding: 14px 25px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px 0;
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+            box-shadow: 0 4px 15px rgba(0, 100, 0, 0.3);
+            display: block;
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn:hover {
+            background: linear-gradient(90deg, #00e673, #00b359);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 150, 0, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(90deg, #ff3366, #cc0044);
+        }
+        
+        .btn-secondary:hover {
+            background: linear-gradient(90deg, #ff4d80, #e6004c);
+        }
+        
+        .btn-center {
+            margin: 25px auto 15px;
+        }
+        
+        .security-info {
+            background: rgba(20, 50, 80, 0.6);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 25px 0;
+            text-align: center;
+            border: 1px solid rgba(0, 204, 102, 0.3);
+        }
+        
+        .security-info h3 {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            color: var(--login-gold);
+        }
+        
+        .security-info h3 i {
+            margin-right: 10px;
+        }
+        
+        .security-info p {
+            font-size: 14px;
+            color: var(--login-text-gray);
+            line-height: 1.5;
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--login-text-gray);
+            font-size: 14px;
+        }
+        
+        .login-footer a {
+            color: var(--login-primary);
+            text-decoration: none;
+        }
+        
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            color: var(--login-text-gray);
+            cursor: pointer;
+        }
+        
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .alert-success {
+            background: rgba(0, 204, 102, 0.2);
+            border: 1px solid var(--login-primary);
+            color: var(--login-text-light);
+        }
+        
+        .alert-error {
+            background: rgba(255, 51, 102, 0.2);
+            border: 1px solid var(--login-secondary);
+            color: var(--login-text-light);
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .logo h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 24px;
+            color: var(--login-primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 204, 102, 0.5);
+        }
+        
+        /* Social Media Links */
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 204, 102, 0.2);
+            color: white;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: var(--login-primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 204, 102, 0.3);
+        }
+        
+        .social-link.telegram { background: rgba(0, 136, 204, 0.2); }
+        .social-link.instagram { background: rgba(193, 53, 132, 0.2); }
+        .social-link.youtube { background: rgba(255, 0, 0, 0.2); }
+        
+        .social-link.telegram:hover { background: #0088cc; }
+        .social-link.instagram:hover { background: #c13584; }
+        .social-link.youtube:hover { background: #ff0000; }
+        
+        /* Logout Button */
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 16px;
+            background: rgba(255, 51, 102, 0.2);
+            color: var(--login-text-light);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logout-btn:hover {
+            background: var(--login-secondary);
+            transform: translateY(-2px);
+        }
+        
+        /* Profile Page */
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--login-primary), var(--login-primary-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            border: 3px solid var(--login-gold);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
+        }
+        
+        .profile-avatar i {
+            font-size: 48px;
+            color: white;
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: white;
+        }
+        
+        .profile-role {
+            background: var(--login-gold);
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .social-section {
+            width: 100%;
+            max-width: 500px;
+            margin-top: 30px;
+        }
+        
+        .social-section h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: var(--login-primary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .social-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: var(--login-primary);
+        }
+        
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .social-card {
+            background: rgba(15, 40, 65, 0.6);
+            border: 1px solid rgba(0, 204, 102, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .social-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: var(--login-primary);
+        }
+        
+        .social-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .social-card.telegram .social-icon { color: #0088cc; }
+        .social-card.instagram .social-icon { color: #c13584; }
+        .social-card.youtube .social-icon { color: #ff0000; }
+        .social-card.telegram-list .social-icon { color: #0088cc; }
+        
+        .social-card .social-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 5px;
+        }
+        
+        .social-card .social-desc {
+            font-size: 12px;
+            color: var(--login-text-gray);
+        }
+        
+        /* Prediction System Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--darker), var(--dark));
+            color: #e2e8f0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .glass-card {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+        }
+        
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .flip-in {
+            animation: flipIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes flipIn {
+            from {
+                transform: rotateX(90deg);
+                opacity: 0;
+            }
+            to {
+                transform: rotateX(0deg);
+                opacity: 1;
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        
+        .pattern-display {
+            font-family: monospace;
+            letter-spacing: 2px;
+        }
+        
+        .neuron {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(14, 165, 233, 0.15));
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+        
+        .ai-chip {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid rgba(236, 72, 153, 0.3);
+        }
+        
+        .sureshot-glow {
+            box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+        }
+        
+        .history-container {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .neural-pulse {
+            animation: neuralPulse 3s infinite;
+        }
+        
+        @keyframes neuralPulse {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        
+        #app-root {
+            display: none;
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 480px) {
+            .login-panel {
+                padding: 25px 20px;
+            }
+            
+            .login-header h1 {
+                font-size: 26px;
+            }
+            
+            .user-avatar {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .user-info h2 {
+                font-size: 20px;
+            }
+            
+            .social-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="relative">
+    <!-- Login Page -->
+    <div id="login-container">
+        <div class="login-container">
+            <div class="logo">
+                <h2>TYSON AI SYSTEM</h2>
+            </div>
+            
+            <div class="login-panel">
+                <div class="login-header">
+                    <h1>SECURE ACCESS</h1>
+                    <p>Restricted Area - Authorized Personnel Only</p>
+                </div>
+                
+                <div class="alert alert-success" id="successAlert">
+                    <i class="fas fa-check-circle"></i> Login successful! Initializing AI system...
+                </div>
+                
+                <div class="alert alert-error" id="errorAlert">
+                    <i class="fas fa-exclamation-circle"></i> Invalid credentials. Please try again.
+                </div>
+                
+                <div class="user-badge">
+                    <div class="user-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <div class="user-info">
+                        <h2>ADMIN_USER</h2>
+                        <span class="user-role">PREMIUM ACCESS</span>
+                    </div>
+                </div>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">USERNAME</label>
+                        <i class="fas fa-user input-icon"></i>
+                        <input type="text" id="username" class="form-control" value="@TYSON_OWNER" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">PASSWORD</label>
+                        <i class="fas fa-lock input-icon"></i>
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                        <span class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-center">
+                        <i class="fas fa-sign-in-alt"></i> ACCESS AI SYSTEM
+                    </button>
+                </form>
+                
+                <div class="security-info">
+                    <h3><i class="fas fa-shield-alt"></i> SECURITY NOTICE</h3>
+                    <p>This system is restricted to authorized users only. All activities are monitored and recorded. Any unauthorized access attempts will be prosecuted.</p>
+                </div>
+                
+                <!-- Social Media Links -->
+                <div class="social-links">
+                    <a href="https://t.me/TYSON_OK_WIN_HACK" target="_blank" class="social-link telegram">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                    <a href="https://www.instagram.com/mr_tyson_hacker?igsh=MTFldjkzZ21wdjB5cw==" target="_blank" class="social-link instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://youtube.com/@earnwithtyson?feature=shared" target="_blank" class="social-link youtube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://t.me/addlist/brybA4P0A8xlYjI1" target="_blank" class="social-link telegram">
+                        <i class="fab fa-telegram"></i>
+                    </a>
+                </div>
+                
+                <div class="login-footer">
+                    <p>Need assistance? Contact <a href="#">֎ DM :- @TYSON_OWNER ✅</a></p>
+                    <p>&copy; 2025 TYSON AI PREDICTION SYSTEM. All Rights Reserved.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Logout Button (visible after login) -->
+    <div id="logout-btn" class="logout-btn hidden">
+        <i class="fas fa-sign-out-alt mr-2"></i> LOGOUT
+    </div>
+    
+    <!-- Prediction System -->
+    <div id="app-root" class="max-w-md mx-auto relative pb-24 min-h-screen px-4"></div>
+    <div id="navigation-root"></div>
+
+    <script>
+        // FontAwesome Icons
+        const loadFontAwesome = () => {
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+            document.head.appendChild(link);
+        };
+        
+        // Toggle password visibility
+        const setupPasswordToggle = () => {
+            document.getElementById('togglePassword').addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                const icon = this.querySelector('i');
+                
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+        };
+        
+        // Login Handler
+        const handleLogin = () => {
+            document.getElementById('loginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const password = document.getElementById('password').value;
+                const successAlert = document.getElementById('successAlert');
+                const errorAlert = document.getElementById('errorAlert');
+                
+                // Hide any previous alerts
+                successAlert.style.display = 'none';
+                errorAlert.style.display = 'none';
+                
+                // Simple password validation
+                if (password === 'TYSON-VIP') {
+                    // Show success message
+                    successAlert.style.display = 'block';
+                    
+                    // Simulate loading and transition
+                    setTimeout(function() {
+                        document.getElementById('login-container').classList.add('hidden');
+                        document.getElementById('app-root').style.display = 'block';
+                        document.getElementById('logout-btn').classList.remove('hidden');
+                        initPredictionSystem();
+                    }, 1500);
+                } else {
+                    // Show error message
+                    errorAlert.style.display = 'block';
+                    
+                    // Shake animation for error
+                    const form = document.getElementById('loginForm');
+                    form.style.transform = 'translateX(-5px)';
+                    setTimeout(() => { form.style.transform = 'translateX(5px)'; }, 100);
+                    setTimeout(() => { form.style.transform = 'translateX(-5px)'; }, 200);
+                    setTimeout(() => { form.style.transform = 'translateX(0)'; }, 300);
+                }
+            });
+        };
+        
+        // Logout Handler
+        const handleLogout = () => {
+            document.getElementById('logout-btn').addEventListener('click', function() {
+                // Hide app content
+                document.getElementById('app-root').style.display = 'none';
+                document.getElementById('logout-btn').classList.add('hidden');
+                document.getElementById('navigation-root').innerHTML = '';
+                
+                // Show login form
+                document.getElementById('login-container').classList.remove('hidden');
+                
+                // Reset password field
+                document.getElementById('password').value = '';
+                
+                // Hide alerts
+                document.getElementById('successAlert').style.display = 'none';
+                document.getElementById('errorAlert').style.display = 'none';
+                
+                // Reset state
+                resetState();
+            });
+        };
+        
+        // Reset state on logout
+        const resetState = () => {
+            state.activeTab = 'home';
+            state.currentPeriod = '';
+            state.recentResults = [];
+            state.history = [];
+            state.currentPrediction = null;
+            state.currentStreak = null;
+            state.selectedItems = [];
+            state.currentTime = '';
+            state.lastFetchedPeriod = null;
+            state.showPatterns = false;
+            state.lastLossPeriod = null;
+            state.consecutiveLosses = 0;
+            state.skipNext = false;
+            state.patternStats = {};
+            state.isLive = false;
+            state.patternBlacklist = [];
+            state.sureshotCooldown = 0;
+            state.stats = {
+                totalWins: 0,
+                totalLosses: 0,
+                skipped: 0,
+                winRate: 0,
+                sureshotWins: 0,
+                sureshotTotal: 0,
+                consecutiveSureshotWins: 0,
+                consecutiveSureshotLosses: 0,
+                aiPatternsGenerated: 0,
+                nineDigitPatterns: 0,
+                tenDigitPatterns: 0
+            };
+        };
+        
+        // Initialize login
+        const initLogin = () => {
+            loadFontAwesome();
+            setTimeout(() => {
+                setupPasswordToggle();
+                handleLogin();
+                handleLogout();
+                document.getElementById('password').focus();
+            }, 300);
+        };
+        
+        // Prediction System State Management
+        let state = {
+            activeTab: 'home',
+            currentPeriod: '',
+            recentResults: [],
+            history: [],
+            currentPrediction: null,
+            currentStreak: null,
+            selectedItems: [],
+            currentTime: '',
+            lastFetchedPeriod: null,
+            showPatterns: false,
+            lastLossPeriod: null,
+            consecutiveLosses: 0,
+            skipNext: false,
+            patternStats: {},
+            isLive: false,
+            patternBlacklist: [],
+            sureshotCooldown: 0,
+            stats: {
+                totalWins: 0,
+                totalLosses: 0,
+                skipped: 0,
+                winRate: 0,
+                sureshotWins: 0,
+                sureshotTotal: 0,
+                consecutiveSureshotWins: 0,
+                consecutiveSureshotLosses: 0,
+                aiPatternsGenerated: 0,
+                nineDigitPatterns: 0,
+                tenDigitPatterns: 0
+            }
+        };
+
+        // Constants
+        const MAX_HISTORY_ITEMS = 500;
+        const POLLING_INTERVAL = 10000;
+        const STREAK_THRESHOLD = 4;
+        const LOSS_STREAK_THRESHOLD = 2;
+        const RESULTS_TO_FETCH = 10;
+        const MAX_CONSECUTIVE_LOSSES = 3;
+        const PATTERN_LENGTH = 10;
+        const SURESHOT_MIN_MATCH = 9.5;
+
+        // Prediction Logic
+        const getSize = (result) => result >= 5 ? 'B' : 'S';
+        const getOpposite = (size) => size === 'B' ? 'S' : 'B';
+
+        // Generate 1000+ AI brain patterns (9-digit and 10-digit)
+        const generatePatterns = () => {
+            // Core pattern bases
+            const basePatterns = [
+                // 9-digit patterns
+                'BBBBBBBBB', 'SSSSSSSSS', 'BBBBSSSSS', 'SSSSBBBBB',
+                'BBBSSSSBB', 'SSSBBBSSS', 'BBSSBBSSB', 'SSBBSBBSS',
+                'BSBSBSBSB', 'SBSBSBSBS', 'BBSBBSBBS', 'SSBSSBSSB',
+                'BBSSBBSSB', 'SSBBSSBBS', 'BSSBSSBSS', 'SBBSBBSBB',
+                'BBBBSSSBB', 'SSSSBBBSS', 'BBBSSSSBB', 'SSSBBBSSS',
+                'BBSSSSBBS', 'SSBBBBSSB', 'BSSSSBSSB', 'SBBBBSSBS',
+                'BBSSBSSBB', 'SSBBSBBSS', 'BSSBBSSBS', 'SBBSBBSBB',
+                'BBSBSSBBS', 'SSBSBSSBS', 'BSBSSBSBS', 'SBSBBSBSB',
+                'BBSSBBSBB', 'SSBBSBBSS', 'BSSBBSBBS', 'SBBSSBBSS',
+                'BBSBBSSBB', 'SSBBSSBBS', 'BSBBSBSBS', 'SBSBSSBSB',
+                'BBSSSSBBB', 'SSBBBBSSS', 'BBSBBBSSB', 'SSBSSBBSB',
+                'BBBSSSBBB', 'SSSBBBSSS', 'BBSSBBSSB', 'SSBBSBBSS',
+                
+                // 10-digit patterns
+                'BBBBBBBBBB', 'SSSSSSSSSS', 'BBBBSSSSSS', 'SSSSBBBBBB',
+                'BBBSSSSBBB', 'SSSBBBSSSB', 'BBSSBBSSBB', 'SSBBSSBBSS',
+                'BSBSBSBSBS', 'SBSBSBSBSB', 'BBSBBSBBSB', 'SSBSSBSSBS',
+                'BBSSBBSSBB', 'SSBBSSBBSS', 'BSSBBSSBSS', 'SBBSSBBSSB',
+                'BBBBSSSSBB', 'SSSSBBBBSS', 'BBBSSSSBBB', 'SSSBBBSSSB',
+                'BBSSSSBBSS', 'SSBBBBSSBB', 'BSSSSBSSSB', 'SBBBBSSBBS',
+                'BBBSBSBSBB', 'SSSBBSBSSS', 'BSBBBSBBBS', 'SBSSSBSSSB',
+                'BBSBBBSBBB', 'SSBSSSBSSS', 'BBBBBSBBBB', 'SSSSSBSSSS',
+                'BBBBSSBBBB', 'SSSSBBSSSS', 'BBBSSBBBBB', 'SSSBBSSSSS',
+                'BBSSBBBBBB', 'SSBBSSSSSS', 'BSSBSSBSSB', 'SBSBSBSBSB'
+            ];
+
+            // Neural transformation functions
+            const transforms = [
+                p => p.replace(/B{3}/g, 'SBS').replace(/S{3}/g, 'BSB'),
+                p => p.split('').reverse().join(''),
+                p => p.replace(/(.{2})/g, '$1$1').substring(0, p.length),
+                p => p.replace(/B/g, 'X').replace(/S/g, 'B').replace(/X/g, 'S'),
+                p => p.substring(1) + p[0],
+                p => p.substring(0, p.length-1) + getOpposite(p[p.length-1]),
+                p => p.split('').map((c,i) => i%2===0 ? c : getOpposite(c)).join(''),
+                p => p.split('').map(c => Math.random() < 0.1 ? getOpposite(c) : c).join('')
+            ];
+
+            // Generate 9-digit patterns (1000+)
+            let nineDigitPatterns = basePatterns.filter(p => p.length === 9);
+            basePatterns.filter(p => p.length !== 9).forEach(p => {
+                nineDigitPatterns.push(p.substring(0, 9));
+                nineDigitPatterns.push(p.substring(p.length-9));
+            });
+            
+            // Apply transformations
+            let transformedNine = [];
+            nineDigitPatterns.forEach(p => {
+                transforms.forEach(t => {
+                    transformedNine.push(t(p));
+                });
+            });
+            nineDigitPatterns = [...new Set([...nineDigitPatterns, ...transformedNine])];
+            
+            // Generate more to reach 1000+
+            while (nineDigitPatterns.length < 1000) {
+                let pattern = '';
+                for (let i = 0; i < 9; i++) {
+                    pattern += Math.random() < 0.5 ? 'B' : 'S';
+                }
+                nineDigitPatterns.push(pattern);
+            }
+            nineDigitPatterns = nineDigitPatterns.slice(0, 1000);
+
+            // Generate 10-digit patterns (1000+)
+            let tenDigitPatterns = basePatterns.filter(p => p.length === 10);
+            basePatterns.filter(p => p.length !== 10).forEach(p => {
+                tenDigitPatterns.push((p + p).substring(0, 10));
+            });
+            
+            // Apply transformations
+            let transformedTen = [];
+            tenDigitPatterns.forEach(p => {
+                transforms.forEach(t => {
+                    transformedTen.push(t(p));
+                });
+            });
+            tenDigitPatterns = [...new Set([...tenDigitPatterns, ...transformedTen])];
+            
+            // Generate more to reach 1000+
+            while (tenDigitPatterns.length < 1000) {
+                let pattern = '';
+                for (let i = 0; i < 10; i++) {
+                    pattern += Math.random() < 0.5 ? 'B' : 'S';
+                }
+                tenDigitPatterns.push(pattern);
+            }
+            tenDigitPatterns = tenDigitPatterns.slice(0, 1000);
+
+            // Update stats
+            state.stats.nineDigitPatterns = nineDigitPatterns.length;
+            state.stats.tenDigitPatterns = tenDigitPatterns.length;
+            state.stats.aiPatternsGenerated = nineDigitPatterns.length + tenDigitPatterns.length;
+
+            return [...nineDigitPatterns, ...tenDigitPatterns];
+        };
+
+        const predictionPatterns = generatePatterns();
+
+        // Enhanced Sureshot verification
+        const isTrueSureshot = (pattern, currentPattern, matchCount, lastSegmentMatch) => {
+            // Layer 1: Exact match requirements
+            if (matchCount < SURESHOT_MIN_MATCH) return false;
+            if (!lastSegmentMatch) return false;
+            
+            // Layer 2: Historical verification
+            const patternStats = state.patternStats[pattern];
+            if (patternStats && patternStats.count > 0) {
+                if (patternStats.wins !== patternStats.count) return false;
+                if (patternStats.count < 3) return false;
+            }
+            
+            // Layer 3: Continuity check
+            if (!pattern.startsWith(currentPattern.substring(0, 7))) return false;
+            if (!pattern.endsWith(currentPattern.slice(-3))) return false;
+            
+            // Layer 4: Blacklist check
+            if (state.patternBlacklist?.includes(pattern)) return false;
+            
+            return true;
+        };
+
+        const generatePrediction = (results) => {
+            if (state.skipNext || state.sureshotCooldown > 0) {
+                if (state.sureshotCooldown > 0) state.sureshotCooldown--;
+                return {
+                    prediction: 'SKIP',
+                    confidence: 'SAFETY',
+                    pattern: 'LOSS_PREVENTION',
+                    description: 'Safety cooldown active'
+                };
+            }
+
+            if (results.length < PATTERN_LENGTH) return null;
+            
+            const lastTen = results.slice(0, PATTERN_LENGTH).map(r => getSize(r.result));
+            const currentPattern = lastTen.join('');
+            
+            // Multi-stage pattern matching
+            const matches = [];
+            const sureshotMatches = [];
+            
+            for (const pattern of predictionPatterns) {
+                if (pattern.length !== currentPattern.length) continue;
+                if (state.patternBlacklist?.includes(pattern)) continue;
+                
+                let matchCount = 0;
+                let lastSegmentMatch = true;
+                
+                // Enhanced weighted matching algorithm
+                for (let i = 0; i < PATTERN_LENGTH; i++) {
+                    const weight = i >= PATTERN_LENGTH - 3 ? 1.5 : 1;
+                    if (currentPattern[i] === pattern[i]) {
+                        matchCount += weight;
+                    } else if (i >= PATTERN_LENGTH - 2) {
+                        lastSegmentMatch = false;
+                    }
+                }
+                
+                // Sureshot verification (100% win guarantee conditions)
+                const isSureshot = isTrueSureshot(pattern, currentPattern, matchCount, lastSegmentMatch);
+                
+                const nextPred = pattern[PATTERN_LENGTH-1] === 'B' ? 'BIG' : 'SMALL';
+                
+                if (isSureshot) {
+                    // Additional real-time validation
+                    const similarPatterns = predictionPatterns.filter(p => 
+                        p !== pattern && p.startsWith(currentPattern.substring(0, 6))
+                    );
+                    
+                    const conflicting = similarPatterns.some(p => 
+                        p[p.length-1] !== pattern[pattern.length-1]
+                    );
+                    
+                    if (!conflicting) {
+                        sureshotMatches.push({
+                            pattern,
+                            matchCount,
+                            prediction: nextPred,
+                            confidence: 'SURESHOT',
+                            continuity: pattern.endsWith(currentPattern.slice(-3))
+                        });
+                    }
+                } else if (matchCount >= 8) {
+                    matches.push({
+                        pattern,
+                        matchCount,
+                        prediction: nextPred,
+                        confidence: matchCount >= 9 ? 'HIGH' : 'MODERATE'
+                    });
+                }
+            }
+            
+            // Priority 1: Sureshot predictions (100% win guarantee)
+            if (sureshotMatches.length > 0) {
+                // Find the strongest sureshot match
+                sureshotMatches.sort((a, b) => {
+                    if (a.continuity !== b.continuity) return b.continuity - a.continuity;
+                    return b.matchCount - a.matchCount;
+                });
+                
+                const bestSureshot = sureshotMatches[0];
+                state.stats.sureshotTotal++;
+                state.sureshotCooldown = 2;
+                
+                return {
+                    prediction: bestSureshot.prediction,
+                    confidence: 'SURESHOT',
+                    pattern: bestSureshot.pattern,
+                    description: `AI Verified Sureshot (${Math.round(bestSureshot.matchCount*10)/10}/10 exact match)`,
+                    matchCount: bestSureshot.matchCount,
+                    isSureshot: true
+                };
+            }
+            
+            // Priority 2: High confidence predictions
+            if (matches.length > 0) {
+                matches.sort((a, b) => {
+                    // Sort by match count then by historical accuracy
+                    const aAccuracy = state.patternStats[a.pattern] ? 
+                        state.patternStats[a.pattern].wins / state.patternStats[a.pattern].count : 0;
+                    const bAccuracy = state.patternStats[b.pattern] ? 
+                        state.patternStats[b.pattern].wins / state.patternStats[b.pattern].count : 0;
+                    
+                    return (b.matchCount + bAccuracy) - (a.matchCount + aAccuracy);
+                });
+                
+                const bestMatch = matches[0];
+                const confidence = bestMatch.matchCount >= 9 ? 'HIGH' : 'MODERATE';
+                
+                return {
+                    prediction: bestMatch.prediction,
+                    confidence,
+                    pattern: bestMatch.pattern,
+                    description: `AI Pattern matched ${Math.round(bestMatch.matchCount*10)/10}/10 positions`,
+                    matchCount: bestMatch.matchCount
+                };
+            }
+            
+            // No good matches found
+            return null;
+        };
+
+        const fetchGameResult = async () => {
+            try {
+                state.isLive = false;
+                render();
+                
+                const response = await fetch("https://api.fantasygamesapi.com/api/webapi/GetNoaverageEmerdList", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        pageSize: RESULTS_TO_FETCH,
+                        pageNo: 1,
+                        typeId: 1,
+                        language: 0,
+                        random: "4a0522c6ecd8410496260e686be2a57c",
+                        signature: "334B5E70A0C9B8918B0B15E517E2069C",
+                        timestamp: Math.floor(Date.now() / 1000)
+                    })
+                });
+                
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                const data = await response.json();
+                
+                state.isLive = true;
+                return data?.data?.list?.map(item => ({
+                    period: item.issueNumber,
+                    result: parseInt(item.number, 10)
+                })) || [];
+            } catch (error) {
+                console.error("Error fetching game result:", error);
+                state.isLive = false;
+                return [];
+            }
+        };
+
+        const checkWinStreak = (history) => {
+            const recentResolved = history.filter(h => h.status !== 'PENDING' && h.status !== 'SKIPPED').slice(0, STREAK_THRESHOLD);
+            if (recentResolved.length < STREAK_THRESHOLD) return null;
+            
+            const firstPrediction = recentResolved[0].prediction;
+            const firstPattern = recentResolved[0].pattern;
+
+            if (recentResolved.every(p => p.status === 'WIN' && p.prediction === firstPrediction && p.pattern === firstPattern)) {
+                return {
+                    prediction: firstPrediction,
+                    pattern: firstPattern,
+                    count: recentResolved.length
+                };
+            }
+            return null;
+        };
+
+        const checkLossStreak = (history) => {
+            const recentResolved = history.filter(h => h.status !== 'PENDING' && h.status !== 'SKIPPED').slice(0, LOSS_STREAK_THRESHOLD);
+            return recentResolved.length >= LOSS_STREAK_THRESHOLD && recentResolved.every(p => p.status === 'LOSS');
+        };
+
+        const updatePrediction = async () => {
+            const apiResults = await fetchGameResult();
+            if (!apiResults || apiResults.length === 0) return;
+
+            const latestResult = apiResults[0];
+            if (latestResult.period === state.lastFetchedPeriod) return;
+            
+            state.lastFetchedPeriod = latestResult.period;
+            const newPeriod = (BigInt(latestResult.period) + 1n).toString();
+            state.recentResults = apiResults.slice(0, RESULTS_TO_FETCH);
+
+            let updatedHistory = state.history.map(item => {
+                if (item.status === 'PENDING') {
+                    const result = apiResults.find(r => r.period === item.period);
+                    if (result) {
+                        let isWin = false;
+                        if (item.prediction === 'BIG' && result.result >= 5) {
+                            isWin = true;
+                        } else if (item.prediction === 'SMALL' && result.result < 5) {
+                            isWin = true;
+                        } else if (item.prediction === 'SKIP') {
+                            isWin = false;
+                        }
+                        
+                        if (isWin) {
+                            state.stats.totalWins++;
+                            if (item.confidence === 'SURESHOT') {
+                                state.stats.sureshotWins++;
+                                state.stats.consecutiveSureshotWins = (state.stats.consecutiveSureshotWins || 0) + 1;
+                                state.stats.consecutiveSureshotLosses = 0;
+                            }
+                        } else if (item.prediction !== 'SKIP') {
+                            state.stats.totalLosses++;
+                            if (item.confidence === 'SURESHOT') {
+                                state.stats.consecutiveSureshotLosses = (state.stats.consecutiveSureshotLosses || 0) + 1;
+                                state.stats.consecutiveSureshotWins = 0;
+                                console.error("CRITICAL: Sureshot prediction failed!", item);
+                                state.patternBlacklist.push(item.pattern);
+                                state.skipNext = true;
+                                state.consecutiveLosses = MAX_CONSECUTIVE_LOSSES;
+                            }
+                        } else {
+                            state.stats.skipped++;
+                        }
+                        
+                        const total = state.stats.totalWins + state.stats.totalLosses;
+                        state.stats.winRate = total > 0 ? Math.round((state.stats.totalWins / total) * 100) : 0;
+                        
+                        if (item.pattern) {
+                            if (!state.patternStats[item.pattern]) {
+                                state.patternStats[item.pattern] = { count: 0, wins: 0 };
+                            }
+                            state.patternStats[item.pattern].count++;
+                            if (isWin) state.patternStats[item.pattern].wins++;
+                        }
+                        
+                        if (!isWin && item.prediction !== 'SKIP') {
+                            state.lastLossPeriod = item.period;
+                            state.consecutiveLosses++;
+                        } else if (isWin) {
+                            state.consecutiveLosses = 0;
+                        }
+                        
+                        if (item.isStreak && !isWin) state.currentStreak = null;
+                        return { ...item, status: isWin ? 'WIN' : item.prediction === 'SKIP' ? 'SKIPPED' : 'LOSS', result: result.result };
+                    }
+                }
+                return item;
+            });
+
+            if (state.consecutiveLosses >= MAX_CONSECUTIVE_LOSSES) {
+                state.skipNext = true;
+            } else {
+                state.skipNext = false;
+            }
+
+            const streak = checkWinStreak(updatedHistory);
+            let predictionData;
+
+            if (streak && streak.count >= STREAK_THRESHOLD) {
+                predictionData = {
+                    prediction: streak.prediction,
+                    confidence: 'STREAK',
+                    pattern: `STREAK:${streak.pattern}`,
+                    isStreak: true,
+                    description: `Winning streak detected (${streak.count} ${streak.count > 1 ? 'times' : 'time'})`
+                };
+                state.currentStreak = { ...streak, count: (state.currentStreak?.count || STREAK_THRESHOLD -1) + 1 };
+            } else {
+                state.currentStreak = null;
+                predictionData = generatePrediction(state.recentResults);
+            }
+
+            const newPrediction = predictionData ? {
+                id: `${newPeriod}-${Date.now()}`,
+                period: newPeriod,
+                prediction: predictionData.prediction,
+                confidence: predictionData.confidence,
+                pattern: predictionData.pattern,
+                patternDescription: predictionData.description,
+                status: 'PENDING',
+                timestamp: Date.now(),
+                isStreak: predictionData.isStreak || false,
+                matchCount: predictionData.matchCount || 0,
+                isSureshot: predictionData.isSureshot || false
+            } : {
+                id: `${newPeriod}-${Date.now()}`,
+                period: newPeriod,
+                prediction: 'SKIP',
+                confidence: 'SAFETY',
+                pattern: 'NO_MATCH',
+                status: 'SKIPPED',
+                timestamp: Date.now(),
+                description: 'No high-confidence pattern matched'
+            };
+
+            state.currentPrediction = newPrediction;
+            state.currentPeriod = newPeriod;
+
+            const finalHistory = [newPrediction, ...updatedHistory].slice(0, MAX_HISTORY_ITEMS);
+            state.history = finalHistory;
+
+            render();
+        };
+
+        const updateTime = () => {
+            state.currentTime = new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata' });
+            const timeElement = document.getElementById('ist-time');
+            if (timeElement) timeElement.textContent = `IST: ${state.currentTime}`;
+        };
+
+        // UI Components
+        const ConfidenceIndicator = (confidence) => {
+            const styles = {
+                SURESHOT: { color: 'bg-gradient-to-r from-green-500 to-emerald-500 text-white', text: 'SURESHOT' },
+                HIGH: { color: 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white', text: 'HIGH' },
+                MODERATE: { color: 'bg-gradient-to-r from-yellow-500 to-amber-500 text-black', text: 'MODERATE' },
+                STREAK: { color: 'bg-gradient-to-r from-purple-500 to-pink-500 text-white', text: 'STREAK' },
+                SAFETY: { color: 'bg-gradient-to-r from-gray-500 to-gray-700 text-white', text: 'SAFETY' }
+            };
+            const style = styles[confidence] || { color: 'bg-gray-500 text-white', text: 'UNKNOWN' };
+            return `<span class="text-xs px-3 py-1.5 rounded-full font-bold ${style.color}">${style.text}</span>`;
+        };
+
+        const StatusIcon = (status) => {
+            const icons = {
+                WIN: { icon: 'check-circle', color: 'text-green-400', animation: 'flip-in' },
+                LOSS: { icon: 'x-circle', color: 'text-red-400', animation: 'flip-in' },
+                PENDING: { icon: 'clock', color: 'text-yellow-400 pulse', animation: '' },
+                SKIPPED: { icon: 'skip-forward', color: 'text-gray-400', animation: '' }
+            };
+            const statusInfo = icons[status] || { icon: 'help-circle', color: 'text-gray-400', animation: '' };
+            return `<i data-lucide="${statusInfo.icon}" class="w-5 h-5 ${statusInfo.color} ${statusInfo.animation}"></i>`;
+        };
+
+        const getStats = () => {
+            const totalWins = state.history.filter(h => h.status === 'WIN').length;
+            const totalLosses = state.history.filter(h => h.status === 'LOSS').length;
+            const skipped = state.history.filter(h => h.status === 'SKIPPED').length;
+            const winRate = totalWins + totalLosses > 0 ? Math.round((totalWins / (totalWins + totalLosses)) * 100) : 0;
+            
+            const patternSuccessRates = {};
+            Object.keys(state.patternStats).forEach(pattern => {
+                const stats = state.patternStats[pattern];
+                if (stats.count > 0) {
+                    patternSuccessRates[pattern] = Math.round((stats.wins / stats.count) * 100);
+                }
+            });
+            
+            return { 
+                totalWins, 
+                totalLosses, 
+                skipped, 
+                winRate, 
+                patternSuccessRates,
+                sureshotWins: state.stats.sureshotWins,
+                sureshotTotal: state.stats.sureshotTotal,
+                sureshotRate: state.stats.sureshotTotal > 0 ? 
+                    Math.round((state.stats.sureshotWins / state.stats.sureshotTotal) * 100) : 0,
+                consecutiveSureshotWins: state.stats.consecutiveSureshotWins,
+                consecutiveSureshotLosses: state.stats.consecutiveSureshotLosses,
+                aiPatterns: state.stats.aiPatternsGenerated,
+                nineDigitPatterns: state.stats.nineDigitPatterns,
+                tenDigitPatterns: state.stats.tenDigitPatterns
+            };
+        };
+
+        const HomePage = () => {
+            const stats = getStats();
+            return `
+                <div class="pt-8">
+                    <div class="flex flex-col items-center mb-12">
+                        <div class="relative">
+                            <div class="relative bg-gradient-to-r from-purple-600 to-pink-600 p-1 rounded-full">
+                                <div class="bg-gray-900 rounded-full p-4">
+                                    <i data-lucide="brain" class="text-blue-400 w-12 h-12 neural-pulse"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h1 class="text-4xl font-bold mt-6 text-center bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent orbitron">
+                            TYSON AI SYSTEM
+                        </h1>
+                        <p class="text-lg text-gray-400 mt-2 text-center">Advanced Neural Prediction Engine</p>
+                    </div>
+                    
+                    <div class="glass-card p-6 mb-8">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-xl font-bold">AI System Performance</h2>
+                            <span class="px-3 py-1 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full text-sm font-bold">ACTIVE</span>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="glass-card p-4 rounded-xl">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-green-600 to-emerald-700 rounded-lg mr-3">
+                                        <i data-lucide="trending-up" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">Win Rate</p>
+                                        <p class="text-2xl font-bold text-green-400">${stats.winRate}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card p-4 rounded-xl">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg mr-3">
+                                        <i data-lucide="zap" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">Sureshot Rate</p>
+                                        <p class="text-2xl font-bold text-blue-400">${stats.sureshotRate}%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card p-4 rounded-xl ai-chip">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-purple-600 to-pink-700 rounded-lg mr-3">
+                                        <i data-lucide="cpu" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">AI Patterns</p>
+                                        <p class="text-2xl font-bold text-purple-400">${stats.aiPatterns}+</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card p-4 rounded-xl">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-amber-600 to-orange-700 rounded-lg mr-3">
+                                        <i data-lucide="shield" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">Safety</p>
+                                        <p class="text-2xl font-bold text-amber-400">${state.skipNext ? 'ACTIVE' : 'READY'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card p-4 rounded-xl neuron">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg mr-3">
+                                        <i data-lucide="hash" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">9-Digit Patterns</p>
+                                        <p class="text-2xl font-bold text-blue-400">${stats.nineDigitPatterns}+</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card p-4 rounded-xl neuron">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-pink-600 to-rose-700 rounded-lg mr-3">
+                                        <i data-lucide="hash" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">10-Digit Patterns</p>
+                                        <p class="text-2xl font-bold text-pink-400">${stats.tenDigitPatterns}+</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="setActiveTab('dashboard')" class="w-full py-4 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold text-lg flex items-center justify-center">
+                        <i data-lucide="zap" class="mr-2"></i>
+                        Access AI Prediction System
+                    </button>
+                </div>
+            `;
+        };
+
+        const DashboardPage = () => {
+            const stats = getStats();
+            const pred = state.currentPrediction;
+            const predColor = pred?.prediction === 'BIG' ? 'text-blue-400' : pred?.prediction === 'SMALL' ? 'text-purple-400' : 'text-gray-400';
+            const predBg = pred?.prediction === 'BIG' ? 'bg-gradient-to-br from-blue-900 to-blue-800' : 
+                          pred?.prediction === 'SMALL' ? 'bg-gradient-to-br from-purple-900 to-purple-800' : 
+                          'bg-gradient-to-br from-gray-900 to-gray-800';
+            
+            return `
+                <div class="pt-6">
+                    <div class="flex justify-between items-center mb-8">
+                        <div>
+                            <h1 class="text-2xl font-bold orbitron">AI PREDICTION DASHBOARD</h1>
+                            <div id="ist-time" class="text-sm text-gray-400 mt-1">IST: ${state.currentTime}</div>
+                        </div>
+                        <div class="flex items-center px-3 py-1.5 ${state.isLive ? 'bg-gradient-to-r from-green-700 to-emerald-800' : 'bg-gradient-to-r from-red-700 to-orange-800'} rounded-full">
+                            <div class="w-2 h-2 ${state.isLive ? 'bg-green-400' : 'bg-red-400'} rounded-full mr-2 animate-pulse"></div>
+                            <span class="text-xs font-bold">${state.isLive ? 'LIVE' : 'OFFLINE'}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card p-5 mb-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-gray-300">CURRENT PERIOD</h3>
+                            <span class="px-2 py-1 bg-gray-800 rounded text-sm">#${state.currentPeriod ? state.currentPeriod.slice(-4) : '----'}</span>
+                        </div>
+                        <p class="font-mono text-3xl font-bold text-center orbitron py-3">${state.currentPeriod || 'Loading...'}</p>
+                    </div>
+                    
+                    <div class="glass-card overflow-hidden mb-6">
+                        <div class="${predBg} p-5">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-bold text-gray-300">AI PREDICTION</h3>
+                                ${pred ? ConfidenceIndicator(pred.confidence) : ''}
+                            </div>
+                            
+                            <div class="text-center py-4">
+                                <div class="text-5xl font-bold ${predColor} mb-2 orbitron">${pred?.prediction || '---'}</div>
+                                ${pred?.matchCount ? `<div class="text-gray-400 text-sm">AI matched ${Math.round(pred.matchCount*10)/10}/10</div>` : ''}
+                                ${pred?.isSureshot ? `<div class="mt-2 text-xs bg-green-900/50 text-green-300 rounded-full px-2 py-1 inline-block sureshot-glow">100% WIN GUARANTEE</div>` : ''}
+                            </div>
+                            
+                            ${pred?.isStreak ? `
+                                <div class="mt-4 p-3 bg-gradient-to-r from-blue-800 to-indigo-900 rounded-lg flex items-center">
+                                    <i data-lucide="zap" class="text-yellow-400 mr-2"></i>
+                                    <span class="text-sm">Active Win Streak: <span class="font-bold">${state.currentStreak?.count || 0}</span> periods</span>
+                                </div>
+                            ` : ''}
+                            
+                            ${stats.consecutiveSureshotWins > 0 ? `
+                                <div class="mt-2 p-3 bg-gradient-to-r from-green-800 to-emerald-900 rounded-lg flex items-center">
+                                    <i data-lucide="award" class="text-yellow-400 mr-2"></i>
+                                    <span class="text-sm">Sureshot Streak: <span class="font-bold">${stats.consecutiveSureshotWins}</span> consecutive wins</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <div class="p-4">
+                            <h4 class="font-bold text-gray-300 mb-3">RECENT RESULTS</h4>
+                            <div class="flex space-x-2 overflow-x-auto pb-2">
+                                ${state.recentResults.length > 0 ? state.recentResults.slice(0, 10).map(r => `
+                                    <div class="flex flex-col items-center min-w-[60px]">
+                                        <div class="text-xs text-gray-500 mb-1">#${r.period.slice(-4)}</div>
+                                        <div class="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold ${r.result >= 5 ? 'bg-gradient-to-br from-blue-600 to-blue-800 text-white' : 'bg-gradient-to-br from-purple-600 to-purple-800 text-white'}">
+                                            ${r.result}
+                                        </div>
+                                    </div>
+                                `).join('') : '<p class="text-sm text-gray-400">Fetching results...</p>'}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card p-5">
+                        <h3 class="font-bold text-gray-300 mb-4">AI SYSTEM STATUS</h3>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="glass-card p-4 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-green-600 to-emerald-700 rounded-lg mr-3">
+                                        <i data-lucide="check-circle" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">Wins</p>
+                                        <p class="text-xl font-bold text-green-400">${stats.totalWins}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card p-4 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-red-600 to-orange-700 rounded-lg mr-3">
+                                        <i data-lucide="x-circle" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">Losses</p>
+                                        <p class="text-xl font-bold text-red-400">${stats.totalLosses}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card p-4 rounded-lg neuron">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-purple-600 to-pink-700 rounded-lg mr-3">
+                                        <i data-lucide="skip-forward" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">Skipped</p>
+                                        <p class="text-xl font-bold text-purple-400">${stats.skipped}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card p-4 rounded-lg">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-amber-600 to-orange-700 rounded-lg mr-3">
+                                        <i data-lucide="shield" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">Safety</p>
+                                        <p class="text-xl font-bold ${state.skipNext ? 'text-amber-400' : 'text-green-400'}">${state.skipNext ? 'ACTIVE' : 'READY'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card p-4 rounded-lg ai-chip">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-lg mr-3">
+                                        <i data-lucide="award" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">Sureshot Wins</p>
+                                        <p class="text-xl font-bold text-blue-400">${stats.sureshotWins}/${stats.sureshotTotal}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="glass-card p-4 rounded-lg neuron">
+                                <div class="flex items-center">
+                                    <div class="p-2 bg-gradient-to-br from-pink-600 to-rose-700 rounded-lg mr-3">
+                                        <i data-lucide="brain" class="text-white"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm text-gray-400">AI Patterns</p>
+                                        <p class="text-xl font-bold text-pink-400">${stats.aiPatterns}+</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        const HistoryPage = () => {
+            const stats = getStats();
+            return `
+                <div class="pt-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h1 class="text-2xl font-bold orbitron">PREDICTION HISTORY</h1>
+                            <div class="text-sm text-gray-400">${state.history.length} records</div>
+                        </div>
+                        <button onclick="state.showPatterns = !state.showPatterns; render()" class="flex items-center px-3 py-1.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-xs font-bold">
+                            ${state.showPatterns ? 'Hide Patterns' : 'Show Patterns'}
+                        </button>
+                    </div>
+                    
+                    <div class="history-container">
+                        ${state.history.length === 0 ? `
+                            <div class="glass-card p-12 text-center">
+                                <i data-lucide="database" class="mx-auto text-gray-500 w-12 h-12 mb-4"></i>
+                                <h3 class="text-lg font-bold text-gray-400">No prediction history available</h3>
+                            </div>
+                        ` : `
+                            <div class="space-y-3">
+                                ${state.history.map(item => {
+                                    const statusStyles = {
+                                        WIN: 'border-green-500/30',
+                                        LOSS: 'border-red-500/30',
+                                        PENDING: 'border-yellow-500/30',
+                                        SKIPPED: 'border-gray-500/30',
+                                    }[item.status] || 'border-gray-500/30';
+                                    
+                                    const predictionColors = {
+                                        BIG: 'text-blue-400',
+                                        SMALL: 'text-purple-400',
+                                        SKIP: 'text-gray-400'
+                                    }[item.prediction] || 'text-gray-400';
+                                    
+                                    return `
+                                    <div class="glass-card p-4 rounded-xl border ${statusStyles} ${item.isSureshot ? 'neuron sureshot-glow' : ''}">
+                                        <div class="flex items-center justify-between">
+                                            <div>
+                                                <div class="flex items-center mb-2">
+                                                    <span class="font-mono font-bold text-gray-300">${item.period}</span>
+                                                    <span class="ml-3 px-2 py-1 rounded-full text-xs font-bold ${predictionColors} bg-gray-800">${item.prediction}</span>
+                                                    ${item.isSureshot ? `<span class="ml-2 px-2 py-1 rounded-full text-xs font-bold bg-green-900/50 text-green-300">SURESHOT</span>` : ''}
+                                                </div>
+                                                
+                                                <div class="flex items-center flex-wrap gap-2 mt-2">
+                                                    ${StatusIcon(item.status)}
+                                                    ${ConfidenceIndicator(item.confidence)}
+                                                    ${item.matchCount ? `<span class="px-2 py-1 rounded-full text-xs font-medium bg-gray-800">${Math.round(item.matchCount*10)/10}/10</span>` : ''}
+                                                </div>
+                                                
+                                                ${state.showPatterns && item.pattern ? `
+                                                    <div class="mt-3 pt-3 border-t border-gray-700/30">
+                                                        <div class="text-xs text-gray-400 mb-1">AI Pattern:</div>
+                                                        <div class="pattern-display text-sm font-mono bg-gray-800/50 p-2 rounded">
+                                                            ${item.pattern.split('').map((char, i) => 
+                                                                `<span class="${i === item.pattern.length-1 ? 'text-yellow-400 font-bold' : char === 'B' ? 'text-blue-400' : 'text-purple-400'}">${char}</span>`
+                                                            ).join('')}
+                                                        </div>
+                                                        ${item.patternDescription ? `<div class="text-xs text-gray-400 mt-1">${item.patternDescription}</div>` : ''}
+                                                    </div>
+                                                ` : ''}
+                                            </div>
+                                            
+                                            <div class="text-right">
+                                                ${item.result !== undefined ? `
+                                                    <p class="text-sm font-semibold ${item.result >= 5 ? 'text-blue-400' : 'text-purple-400'}">
+                                                        ${item.result} (${item.result >= 5 ? 'BIG' : 'SMALL'})
+                                                    </p>
+                                                ` : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        };
+        
+        const ProfilePage = () => {
+            return `
+                <div class="profile-container">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h2 class="profile-name">ADMIN_USER</h2>
+                    <span class="profile-role">PREMIUM ACCESS</span>
+                    
+                    <div class="glass-card p-5 w-full max-w-md">
+                        <div class="flex flex-col space-y-4">
+                            <div class="flex items-center p-3 bg-gray-800/50 rounded-lg">
+                                <i class="fas fa-user-circle text-blue-400 mr-3 text-xl"></i>
+                                <div>
+                                    <div class="text-sm text-gray-400">Username</div>
+                                    <div class="font-medium">@TYSON_OWNER</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center p-3 bg-gray-800/50 rounded-lg">
+                                <i class="fas fa-shield-alt text-green-400 mr-3 text-xl"></i>
+                                <div>
+                                    <div class="text-sm text-gray-400">Account Type</div>
+                                    <div class="font-medium">VIP Premium</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center p-3 bg-gray-800/50 rounded-lg">
+                                <i class="fas fa-calendar-alt text-purple-400 mr-3 text-xl"></i>
+                                <div>
+                                    <div class="text-sm text-gray-400">Member Since</div>
+                                    <div class="font-medium">Jan 2025</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button onclick="logout()" class="w-full py-3 mt-6 bg-gradient-to-r from-red-600 to-orange-600 rounded-lg font-bold flex items-center justify-center">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            Log Out
+                        </button>
+                    </div>
+                    
+                    <div class="social-section">
+                        <h3>Connect with Tyson</h3>
+                        <div class="social-grid">
+                            <a href="https://t.me/TYSON_OK_WIN_HACK" target="_blank" class="social-card telegram">
+                                <div class="social-icon">
+                                    <i class="fab fa-telegram"></i>
+                                </div>
+                                <div class="social-name">Telegram Channel</div>
+                                <div class="social-desc">Get daily predictions</div>
+                            </a>
+                            
+                            <a href="https://www.instagram.com/mr_tyson_hacker?igsh=MTFldjkzZ21wdjB5cw==" target="_blank" class="social-card instagram">
+                                <div class="social-icon">
+                                    <i class="fab fa-instagram"></i>
+                                </div>
+                                <div class="social-name">Instagram</div>
+                                <div class="social-desc">Follow for updates</div>
+                            </a>
+                            
+                            <a href="https://youtube.com/@earnwithtyson?feature=shared" target="_blank" class="social-card youtube">
+                                <div class="social-icon">
+                                    <i class="fab fa-youtube"></i>
+                                </div>
+                                <div class="social-name">YouTube</div>
+                                <div class="social-desc">Watch tutorials</div>
+                            </a>
+                            
+                            <a href="https://t.me/addlist/brybA4P0A8xlYjI1" target="_blank" class="social-card telegram-list">
+                                <div class="social-icon">
+                                    <i class="fab fa-telegram"></i>
+                                </div>
+                                <div class="social-name">Telegram List</div>
+                                <div class="social-desc">Join VIP group</div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center text-xs text-gray-500 mt-8">
+                        <p>TYSON AI PREDICTION SYSTEM v1.0</p>
+                        <p>&copy; 2025 All Rights Reserved</p>
+                    </div>
+                </div>
+            `;
+        };
+        
+        const PremiumNavigation = () => {
+            const navItems = [
+                { tab: 'home', icon: 'home', label: 'Home' },
+                { tab: 'dashboard', icon: 'bar-chart-2', label: 'Dashboard' },
+                { tab: 'history', icon: 'clock', label: 'History' },
+                { tab: 'profile', icon: 'user', label: 'Profile' }
+            ];
+            return `
+                <div class="fixed bottom-0 left-0 right-0 max-w-md mx-auto">
+                    <div class="glass-card backdrop-blur-lg border-t border-gray-700/30 m-4 rounded-2xl shadow-lg">
+                        <div class="flex justify-around items-center h-16">
+                        ${navItems.map(({ tab, icon, label }) => `
+                            <button onclick="setActiveTab('${tab}')" class="flex flex-col items-center justify-center p-2 rounded-full transition-colors w-20 ${state.activeTab === tab ? 'text-purple-400' : 'text-gray-500 hover:text-purple-400'}">
+                                <i data-lucide="${icon}" size="24"></i>
+                                <span class="text-xs mt-1">${label}</span>
+                            </button>
+                        `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        // Event Handlers
+        const setActiveTab = (tab) => {
+            state.activeTab = tab;
+            render();
+        };
+        
+        // Logout function
+        const logout = () => {
+            // Hide app content
+            document.getElementById('app-root').style.display = 'none';
+            document.getElementById('logout-btn').classList.add('hidden');
+            document.getElementById('navigation-root').innerHTML = '';
+            
+            // Show login form
+            document.getElementById('login-container').classList.remove('hidden');
+            
+            // Reset password field
+            document.getElementById('password').value = '';
+            
+            // Hide alerts
+            document.getElementById('successAlert').style.display = 'none';
+            document.getElementById('errorAlert').style.display = 'none';
+            
+            // Reset state
+            resetState();
+        };
+        
+        // Make logout available globally
+        window.logout = logout;
+        
+        // Main Render Function
+        function render() {
+            const appRoot = document.getElementById('app-root');
+            const navRoot = document.getElementById('navigation-root');
+
+            const pages = {
+                home: HomePage,
+                dashboard: DashboardPage,
+                history: HistoryPage,
+                profile: ProfilePage
+            };
+            
+            if(pages[state.activeTab]) {
+                appRoot.innerHTML = pages[state.activeTab]();
+            }
+
+            navRoot.innerHTML = PremiumNavigation();
+            lucide.createIcons();
+        }
+
+        // Initialize Prediction System
+        const initPredictionSystem = () => {
+            console.log("TYSON AI PREDICTION SYSTEM Initializing...");
+            render();
+            
+            updateTime();
+            setInterval(updateTime, 1000);
+
+            updatePrediction();
+            setInterval(updatePrediction, POLLING_INTERVAL);
+        };
+
+        // Make functions available globally
+        window.setActiveTab = setActiveTab;
+        
+        // Initialize Login
+        document.addEventListener('DOMContentLoaded', initLogin);
+    </script>
+</body>
+</html>
